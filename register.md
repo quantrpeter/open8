@@ -29,3 +29,4 @@ The Open8 architecture features a simple and efficient register set inspired by 
   - **I**: Global Interrupt Enable
 
 > This register set provides a balance between simplicity and performance, supporting efficient instruction execution and flexible addressing modes.
+
