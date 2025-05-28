@@ -93,3 +93,63 @@ Rules
 | SWAP        | Rd               | Swap Nibbles in Register                      | Rd[7:4] ↔ Rd[3:0]                           | None            |
 | WDR         |                  | Watchdog Reset                                |                                               | None            |
 
+## Instruction Encoding
+
+All Open8 instructions are encoded as 16-bit opcodes. The general encoding format is as follows:
+
+- **Opcode field:** Identifies the instruction (typically upper bits)
+- **Register fields:** Specify destination/source registers
+- **Immediate fields:** For constants or addresses
+- **Other fields:** For bit numbers, I/O addresses, etc.
+
+Below is a draft of typical encoding formats for key instruction types:
+
+| Instruction      | Encoding (bit fields)         | Description/Notes                                 |
+|------------------|-------------------------------|---------------------------------------------------|
+| ADD Rd, Rr       | 0000 11rd dddd rrrr           | d = dest reg (R0–R31), r = src reg (R0–R31)      |
+| ADC Rd, Rr       | 0001 11rd dddd rrrr           |                                                   |
+| SUB Rd, Rr       | 0001 10rd dddd rrrr           |                                                   |
+| SBC Rd, Rr       | 0000 10rd dddd rrrr           |                                                   |
+| AND Rd, Rr       | 0010 00rd dddd rrrr           |                                                   |
+| OR Rd, Rr        | 0010 10rd dddd rrrr           |                                                   |
+| EOR Rd, Rr       | 0010 01rd dddd rrrr           |                                                   |
+| INC Rd           | 0011 10dd dddd 0011           | d = dest reg                                      |
+| DEC Rd           | 0011 10dd dddd 1010           |                                                   |
+| LDI Rd, K        | 1110 KKKK dddd KKKK           | d = R16–R31, K = 8-bit immediate                  |
+| MOV Rd, Rr       | 0010 11rd dddd rrrr           |                                                   |
+| MOVW Rd, Rr      | 0000 0001 dddd rrrr           | d, r = even reg pairs (R0, R2, ...)               |
+| CLR Rd           | 0010 01dd dddd 0010           | (EOR Rd, Rd)                                      |
+| COM Rd           | 0010 01dd dddd 0000           | (EOR Rd, 0xFF)                                    |
+| NEG Rd           | 0010 01dd dddd 0001           |                                                   |
+| LSL Rd           | 0000 11dd dddd 0000           | (ADD Rd, Rd)                                      |
+| LSR Rd           | 1001 010d dddd 0110           |                                                   |
+| ROL Rd           | 0001 11dd dddd 0000           | (ADC Rd, Rd)                                      |
+| ROR Rd           | 1001 010d dddd 0111           |                                                   |
+| ASR Rd           | 1001 010d dddd 0101           |                                                   |
+| SBR Rd, K        | 0110 KKKK dddd KKKK           | (ORI)                                             |
+| CBR Rd, K        | 0111 KKKK dddd KKKK           | (ANDI with ~K)                                    |
+| NOP              | 0000 0000 0000 0000           |                                                   |
+| RJMP k           | 1100 kkkk kkkk kkkk           | k = 12-bit signed offset                          |
+| JMP k            | 1001 010k kkkk 110k kkkk kkkk kkkk | 22-bit address (uses 2 words)                |
+| BRNE k           | 1111 01kk kkkk k001           | k = 7-bit offset                                  |
+| BREQ k           | 1111 00kk kkkk k001           |                                                   |
+| CALL k           | 1001 010k kkkk 111k kkkk kkkk kkkk | 22-bit address (uses 2 words)                |
+| RET              | 1001 0101 0000 1000           |                                                   |
+| RETI             | 1001 0101 0001 1000           |                                                   |
+| PUSH Rr          | 1001 001r rrrr 1111           | r = src reg                                       |
+| POP Rd           | 1001 000d dddd 1111           | d = dest reg                                      |
+| ST X, Rr         | 1001 001d dddd 1100           | d = src reg                                       |
+| LD Rd, X         | 1001 000d dddd 1100           | d = dest reg                                      |
+| STS k, Rr        | 1001 001d dddd 0000 kkkk kkkk kkkk kkkk | 16-bit address (uses 2 words)           |
+| LDS Rd, k        | 1001 000d dddd 0000 kkkk kkkk kkkk kkkk | 16-bit address (uses 2 words)           |
+| IN Rd, P         | 1011 0PPd dddd PPPP           | P = I/O address                                   |
+| OUT P, Rr        | 1011 1PPr rrrr PPPP           |                                                   |
+| SBI P, b         | 1001 1010 PPPP bbbb           | Set bit b in I/O P                                |
+| CBI P, b         | 1001 1000 PPPP bbbb           | Clear bit b in I/O P                              |
+| SLEEP            | 1001 0101 1000 1000           |                                                   |
+| WDR              | 1001 0101 1010 1000           |                                                   |
+| SWAP Rd          | 1001 010d dddd 0010           |                                                   |
+| BREAK            | 1001 0101 1001 1000           |                                                   |
+
+> Note: This is a draft encoding. Actual bit patterns and field assignments may be refined as the architecture evolves. For multi-word instructions (e.g., JMP, CALL, LDS, STS), the first word is the opcode, and the following word(s) contain the address or immediate value.
+
