@@ -28,5 +28,22 @@ The Open8 architecture features a simple and efficient register set inspired by 
   - **T**: Transfer Bit
   - **I**: Global Interrupt Enable
 
+## Status Register (SREG) Bit Description
+
+The SREG (Status Register) is an 8-bit register that holds important processor flags:
+
+| Bit | Name | Description                                                                 |
+|-----|------|-----------------------------------------------------------------------------|
+| 7   | I    | Global Interrupt Enable: Enables/disables all interrupts                    |
+| 6   | T    | Transfer Bit: Used for bit copy instructions                                |
+| 5   | H    | Half Carry Flag: Set on half-byte (nibble) carry in arithmetic operations   |
+| 4   | S    | Sign Flag: N ⊕ V, indicates signed result of arithmetic operations          |
+| 3   | V    | Overflow Flag: Set on two’s complement overflow in arithmetic operations    |
+| 2   | N    | Negative Flag: Set if the result of an operation is negative                |
+| 1   | Z    | Zero Flag: Set if the result of an operation is zero                        |
+| 0   | C    | Carry Flag: Set if an arithmetic operation results in a carry/borrow         |
+
+> The SREG allows conditional branching and efficient interrupt and arithmetic handling.
+
 > This register set provides a balance between simplicity and performance, supporting efficient instruction execution and flexible addressing modes.
 
