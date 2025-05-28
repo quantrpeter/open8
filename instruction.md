@@ -1,5 +1,11 @@
 # Open8 Instruction Set Overview
 
+Rules
+
+- Left hand side is destination, Right hand side is source. Some AVR instruction doesn't, i don't like it
+
+
+
 | Category         | Mnemonic(s)         | Description                                      |
 |------------------|---------------------|--------------------------------------------------|
 | **Arithmetic**   | ADD, ADC, SUB, SBC, INC, DEC, MUL | Add, add with carry, subtract, subtract with carry, increment, decrement, multiply |
