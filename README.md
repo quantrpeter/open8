@@ -1,3 +1,5 @@
+![](https://www.hkprog.org/wp-content/uploads/2025/05/Embedded-Special-Interest-Group-5-open-8-banner-1.png)
+
 # Open8: Open Source 8-bit Microcontroller Architecture
 
 ## Architecture Goals
